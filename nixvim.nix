@@ -34,11 +34,19 @@ in
     ./config/plugins/custom/comment.nix
     ./config/plugins/custom/toggleterm.nix
     ./config/plugins/custom/oil.nix
+    ./config/plugins/custom/tinymist.nix
   ];
 
   colorschemes = {
-    tokyonight = {
+    catppuccin = {
       enable = true;
+      settings = {
+        flavour = "frappe";
+        no_italic = true;
+      };
+    };
+    tokyonight = {
+      enable = false;
       settings = {
         style = "night";
         styles = {

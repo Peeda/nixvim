@@ -70,6 +70,7 @@
       clangd = {
         enable = true;
       };
+      tinymist.enable = true;
       # gopls = {
       #   enable = true;
       # };
