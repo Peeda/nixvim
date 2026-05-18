@@ -78,7 +78,7 @@ in
 
     # Sync clipboard between OS and Neovim
     #  Remove this option if you want your OS clipboard to remain independent.
-    register = "unnamedplus";
+    # register = "unnamedplus";
   };
 
   opts = {
@@ -292,7 +292,7 @@ in
         source = "if_many";
       };
       underline = {
-        severity.__raw = ''vim.diagnostic.severity.ERROR'';
+        severity.__raw = "vim.diagnostic.severity.ERROR";
       };
       signs.__raw = ''
         vim.g.have_nerd_font and {
