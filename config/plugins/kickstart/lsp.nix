@@ -70,7 +70,14 @@
       clangd = {
         enable = true;
       };
-      tinymist.enable = true;
+      tinymist = {
+        enable = true;
+        settings = {
+          # Format Typst files with the bundled typstyle formatter (used by
+          # conform's format_on_save lsp fallback).
+          formatterMode = "typstyle";
+        };
+      };
       # gopls = {
       #   enable = true;
       # };
@@ -79,6 +86,9 @@
       };
       rust_analyzer = {
         enable = true;
+        # Let Nixvim install cargo and rustc alongside the server.
+        installCargo = true;
+        installRustc = true;
       };
       # ...etc. See `https://nix-community.github.io/nixvim/plugins/lsp` for a list of pre-configured LSPs
       #

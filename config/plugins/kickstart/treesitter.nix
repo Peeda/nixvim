@@ -40,6 +40,9 @@
       # xml
       yaml
 
+      # Typst
+      typst
+
       # Rust Development
       rust
       toml # Also for ZMK `keymap.toml`
