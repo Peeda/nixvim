@@ -35,6 +35,7 @@ in
     ./config/plugins/custom/toggleterm.nix
     ./config/plugins/custom/oil.nix
     ./config/plugins/custom/tinymist.nix
+    ./config/plugins/custom/typst.nix
   ];
 
   colorschemes = {
@@ -261,6 +262,9 @@ in
   # https://nix-community.github.io/nixvim/NeovimOptions/autoGroups/index.html
   autoGroups = {
     kickstart-highlight-yank = {
+      clear = true;
+    };
+    typst-setup = {
       clear = true;
     };
   };

@@ -83,15 +83,51 @@
         preset = "luasnip";
       };
 
-      # Blink.cmp includes an optional, recommended rust fuzzy matcher,
-      # which automatically downloads a prebuilt binary when enabled.
+      # Blink.cmp includes an optional, recommended rust fuzzy matcher.
       #
-      # By default, we use the Lua implementation instead, but you may enable
-      # the rust implementation via `'prefer_rust_with_warning'`
+      # `prefer_rust` rather than `prefer_rust_with_warning`: nixpkgs builds
+      # `target/release/libblink_cmp_fuzzy.so` as part of the plugin, so the
+      # binary is always present and nothing is ever downloaded.
+      #
+      # The Lua matcher is a toy by comparison (flat +12/char with a +12 prefix
+      # bonus, no frecency, no proximity, no typo tolerance), which is what made
+      # tinymist's symbol menus useless: every prefix match of `su` scored
+      # exactly the same, so the tie fell straight through to `sort_text` and
+      # the list came out alphabetised, with `subscript` above `sum`.
       #
       # See :h blink-cmp-config-fuzzy for more information
       fuzzy = {
-        implementation = "lua";
+        implementation = "prefer_rust";
+
+        # `sorts` may be a function returning the comparator chain. That matters
+        # for more than tidiness: blink only hands sorting to rust when *every*
+        # entry is a string, so returning an all-string list outside typst keeps
+        # those buffers fully rust-sorted, and only typst falls back to the lua
+        # sort (over at most `max_items` entries -- matching and scoring still
+        # happen in rust either way).
+        sorts.__raw = ''
+          function()
+            -- tinymist returns hundreds of symbols with a `sortText` that is
+            -- just an alphabetical index and no `filterText` at all, i.e. it
+            -- delegates all ranking to us. Within a score tie, prefer the
+            -- shorter label: typst's symbol namespace makes the short name the
+            -- canonical one (`sum`, `sup`, `subset`), while the longer ones are
+            -- derived symbols or snippets.
+            if vim.bo.filetype == 'typst' then
+              return {
+                'exact',
+                'score',
+                function(a, b)
+                  if #a.label == #b.label then return nil end
+                  return #a.label < #b.label
+                end,
+                'sort_text',
+                'label',
+              }
+            end
+            return { 'exact', 'score', 'sort_text', 'label' }
+          end
+        '';
       };
 
       # Shows a signature help window while you type arguments for a function
